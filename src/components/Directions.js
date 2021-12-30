@@ -1,18 +1,9 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import MapboxGL from '@react-native-mapbox-gl/maps'
 import MapboxClient from 'mapbox'
 
 import Places from './Places'
-
-const styles = StyleSheet.create({
-  directionsLine: {
-    lineWidth: 3,
-    lineCap: MapboxGL.LineCap.Round,
-    lineJoin: MapboxGL.LineJoin.Round,
-  },
-})
 
 class Directions extends React.Component {
   static propTypes = {
@@ -161,7 +152,7 @@ class Directions extends React.Component {
         <MapboxGL.LineLayer
           id='mapbox-directions-line'
           belowLayerID={Places.UnselectedSymbolID}
-          style={[styles.directionsLine, this.props.style]}
+          style={[this.props.style]}
         />
       </MapboxGL.ShapeSource>
     )
