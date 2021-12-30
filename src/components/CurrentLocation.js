@@ -1,8 +1,9 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import MapboxGL from '@react-native-mapbox-gl/maps'
 
-const styles = MapboxGL.StyleSheet.create({
+const styles = StyleSheet.create({
   innerCircle: {
     circleRadius: 8,
   },

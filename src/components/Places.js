@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Platform } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import MapboxGL from '@react-native-mapbox-gl/maps'
 
-const styles = MapboxGL.StyleSheet.create({
+const styles = StyleSheet.create({
   icon: {
     iconAllowOverlap: true,
     iconSize: Platform.OS === 'android' ? 0.5 : 0.25,
