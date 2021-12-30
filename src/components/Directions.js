@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import MapboxGL from '@mapbox/react-native-mapbox-gl';
-import MapboxClient from 'mapbox';
+import React from 'react'
+import PropTypes from 'prop-types'
+import MapboxGL from '@react-native-mapbox-gl/maps'
+import MapboxClient from 'mapbox'
 
-import Places from './Places';
+import Places from './Places'
 
 const styles = MapboxGL.StyleSheet.create({
   directionsLine: {
@@ -11,7 +11,7 @@ const styles = MapboxGL.StyleSheet.create({
     lineCap: MapboxGL.LineCap.Round,
     lineJoin: MapboxGL.LineJoin.Round,
   },
-});
+})
 
 class Directions extends React.Component {
   static propTypes = {
@@ -47,114 +47,124 @@ class Directions extends React.Component {
     ]),
 
     style: PropTypes.object,
-  };
+  }
 
-  constructor (props) {
-    super(props);
+  constructor(props) {
+    super(props)
 
     this.state = {
       mapboxClient: null,
       directions: null,
-    };
-
-    this._mapboxClient = null;
-  }
-
-  async componentDidMount () {
-    this.setState({ mapboxClient: new MapboxClient(this.props.accessToken) }, () => {
-      this.fetchDirections(this.props.origin, this.props.destination);
-    });
-  }
-
-  componentWillReceiveProps (nextProps) {
-    const origin = this.props.origin;
-    const dest = this.props.destination;
-
-    if (this.state.directions && (!origin || !dest)) {
-      this.setState({ directions: null });
-      return;
     }
 
-    const nextOrigin = nextProps.origin;
-    const nextDest = nextProps.destination;
+    this._mapboxClient = null
+  }
 
-    if (this.areCoordinatesEqual(origin, nextOrigin) && this.areCoordinatesEqual(dest, nextDest)) {
-      return;
+  async componentDidMount() {
+    this.setState(
+      { mapboxClient: new MapboxClient(this.props.accessToken) },
+      () => {
+        this.fetchDirections(this.props.origin, this.props.destination)
+      }
+    )
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const origin = this.props.origin
+    const dest = this.props.destination
+
+    if (this.state.directions && (!origin || !dest)) {
+      this.setState({ directions: null })
+      return
+    }
+
+    const nextOrigin = nextProps.origin
+    const nextDest = nextProps.destination
+
+    if (
+      this.areCoordinatesEqual(origin, nextOrigin) &&
+      this.areCoordinatesEqual(dest, nextDest)
+    ) {
+      return
     }
 
     if (nextOrigin && nextDest) {
-      this.fetchDirections(nextOrigin, nextDest);
+      this.fetchDirections(nextOrigin, nextDest)
     }
   }
 
-  areCoordinatesEqual (c1, c2) {
+  areCoordinatesEqual(c1, c2) {
     if (!c1 || !c2) {
-      return false;
+      return false
     }
-    const dLng = Math.abs(c1[0] - c2[0]);
-    const dLat = Math.abs(c1[1] - c2[1]);
-    return dLng <= 6e-6 && dLat <= 6e-6;
+    const dLng = Math.abs(c1[0] - c2[0])
+    const dLat = Math.abs(c1[1] - c2[1])
+    return dLng <= 6e-6 && dLat <= 6e-6
   }
 
-  async fetchDirections (origin, dest) {
+  async fetchDirections(origin, dest) {
     if (!origin || !dest || !this.state.mapboxClient) {
-      return;
+      return
     }
 
     const originLatLng = {
       latitude: origin[1],
       longitude: origin[0],
-    };
+    }
 
     const destLatLng = {
       latitude: dest[1],
       longitude: dest[0],
-    };
+    }
 
     const requestOptions = {
       profile: this.props.type,
       geometry: 'polyline',
-    };
+    }
 
-    let res = null;
+    let res = null
     try {
-      res = await this.state.mapboxClient.getDirections([
-        originLatLng,
-        destLatLng,
-      ], requestOptions);
+      res = await this.state.mapboxClient.getDirections(
+        [originLatLng, destLatLng],
+        requestOptions
+      )
     } catch (e) {
-      console.log(e); // eslint-disable-line
+      console.log(e) // eslint-disable-line
     }
 
     if (res == null) {
-      return;
+      return
     }
 
-    const directions = res.entity.routes[0];
+    const directions = res.entity.routes[0]
     if (!directions) {
-      return;
+      return
     }
 
     if (this.props.onDirectionsFetched) {
-      this.props.onDirectionsFetched(directions);
+      this.props.onDirectionsFetched(directions)
     }
 
-    this.setState({ directions: directions });
+    this.setState({ directions: directions })
   }
 
-  render () {
+  render() {
     if (!this.state.directions) {
-      return null;
+      return null
     }
     return (
-      <MapboxGL.ShapeSource id='mapbox-directions-source' shape={this.state.directions.geometry}>
+      <MapboxGL.ShapeSource
+        id='mapbox-directions-source'
+        shape={this.state.directions.geometry}
+      >
         <MapboxGL.LineLayer
           id='mapbox-directions-line'
           belowLayerID={Places.UnselectedSymbolID}
-          style={[styles.directionsLine, this.props.style]} />
+          style={[styles.directionsLine, this.props.style]}
+        />
       </MapboxGL.ShapeSource>
-    );
+    )
   }
 }
 
-export default Directions;
+export default Directions

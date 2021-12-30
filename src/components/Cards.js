@@ -1,9 +1,9 @@
-import React from 'react';
-import MapboxGL from '@mapbox/react-native-mapbox-gl';
-import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
-import SnapCarousel from 'react-native-snap-carousel';
-import findDistance from '@turf/distance';
+import React from 'react'
+import MapboxGL from '@react-native-mapbox-gl/maps'
+import PropTypes from 'prop-types'
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
+import SnapCarousel from 'react-native-snap-carousel'
+import findDistance from '@turf/distance'
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   slideTopRow: {
-    flex: 0.60,
+    flex: 0.6,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     flexDirection: 'row',
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   slideMeta: {
     paddingLeft: 8,
-    justifyContent:'center',
+    justifyContent: 'center',
     flex: 1,
   },
   slideMetaRow: {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 20,
     paddingHorizontal: 22,
-    flex: 0.40,
+    flex: 0.4,
     backgroundColor: 'white',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'white',
   },
-});
+})
 
 class Cards extends React.Component {
   static propTypes = {
@@ -108,59 +108,71 @@ class Cards extends React.Component {
      * Custom card height
      */
     itemHeight: PropTypes.number,
-  };
+  }
 
   static defaultProps = {
     itemHeight: 150,
-  };
+  }
 
-  constructor (props) {
-    super(props);
+  constructor(props) {
+    super(props)
 
     this.state = {
       sliderWidth: null,
       itemWidth: null,
-    };
+    }
 
-    this.renderDefaultItem = this.renderDefaultItem.bind(this);
-    this.onScrollViewLayout = this.onScrollViewLayout.bind(this);
-    this.onSnapToItem = this.onSnapToItem.bind(this);
+    this.renderDefaultItem = this.renderDefaultItem.bind(this)
+    this.onScrollViewLayout = this.onScrollViewLayout.bind(this)
+    this.onSnapToItem = this.onSnapToItem.bind(this)
   }
 
-  onScrollViewLayout (e) {
-    const layout = e.nativeEvent.layout;
-    this.setState({ sliderWidth: layout.width, itemWidth: (layout.width + 4) - 50 });
+  onScrollViewLayout(e) {
+    const layout = e.nativeEvent.layout
+    this.setState({
+      sliderWidth: layout.width,
+      itemWidth: layout.width + 4 - 50,
+    })
   }
 
-  onSnapToItem (updatedActiveIndex) {
+  onSnapToItem(updatedActiveIndex) {
     if (this.props.onActiveIndexChange) {
-      this.props.onActiveIndexChange(updatedActiveIndex);
+      this.props.onActiveIndexChange(updatedActiveIndex)
     }
   }
 
-  renderDefaultItem ({ item }) {
-    const feature = item;
-    const props = feature.properties;
+  renderDefaultItem({ item }) {
+    const feature = item
+    const props = feature.properties
 
     const style = {
       backgroundColor: 'transparent',
       width: this.state.itemWidth,
       height: this.props.itemHeight,
-    };
+    }
 
     let distance = findDistance(
       MapboxGL.geoUtils.makePoint(this.props.origin),
       feature,
-      { units: 'miles' },
-    );
-    distance = Math.round(distance * 10) / 10;
+      { units: 'miles' }
+    )
+    distance = Math.round(distance * 10) / 10
 
     return (
       <View key={feature.id} style={style}>
         <View style={styles.slideStyle}>
-          <View style={[styles.slideTopRow, { backgroundColor: this.props.theme.primaryColor }]}>
+          <View
+            style={[
+              styles.slideTopRow,
+              { backgroundColor: this.props.theme.primaryColor },
+            ]}
+          >
             <View style={styles.slideIcon}>
-              <Image source={this.props.theme.cardIcon} resizeMode='contain' style={{ flex: 1 }} />
+              <Image
+                source={this.props.theme.cardIcon}
+                resizeMode='contain'
+                style={{ flex: 1 }}
+              />
             </View>
 
             <View style={styles.slideMeta}>
@@ -173,7 +185,10 @@ class Cards extends React.Component {
                 <Text
                   ellipsizeMode='tail'
                   numberOfLines={1}
-                  style={[styles.subheader, { flex: 0.9 }]}>{props.addressFormatted}</Text>
+                  style={[styles.subheader, { flex: 0.9 }]}
+                >
+                  {props.addressFormatted}
+                </Text>
                 <Text style={[styles.subheader, { paddingRight: 4 }]}>mi</Text>
               </View>
             </View>
@@ -181,42 +196,78 @@ class Cards extends React.Component {
 
           <View style={styles.slideBottomRow}>
             <View>
-              <Text style={[styles.subheader, { color: this.props.theme.cardTextColor }]}>Hours</Text>
-              <Text style={[styles.subheader, { color: this.props.theme.cardTextColor }]}>{props.hoursFormatted}</Text>
+              <Text
+                style={[
+                  styles.subheader,
+                  { color: this.props.theme.cardTextColor },
+                ]}
+              >
+                Hours
+              </Text>
+              <Text
+                style={[
+                  styles.subheader,
+                  { color: this.props.theme.cardTextColor },
+                ]}
+              >
+                {props.hoursFormatted}
+              </Text>
             </View>
 
             <View>
-              <Text style={[styles.subheader, { color: this.props.theme.cardTextColor, textAlign: 'right' }]}>Phone</Text>
-              <Text style={[styles.subheader, { color: this.props.theme.cardTextColor }]}>{props.phoneFormatted}</Text>
+              <Text
+                style={[
+                  styles.subheader,
+                  { color: this.props.theme.cardTextColor, textAlign: 'right' },
+                ]}
+              >
+                Phone
+              </Text>
+              <Text
+                style={[
+                  styles.subheader,
+                  { color: this.props.theme.cardTextColor },
+                ]}
+              >
+                {props.phoneFormatted}
+              </Text>
             </View>
           </View>
         </View>
       </View>
-    );
+    )
   }
 
-  get renderItem () {
-    return this.props.renderItem ? this.props.renderItem : this.renderDefaultItem;
+  get renderItem() {
+    return this.props.renderItem
+      ? this.props.renderItem
+      : this.renderDefaultItem
   }
 
-  renderCarousel () {
-    if (!this.props.origin || !this.state.sliderWidth || !this.state.itemWidth || !this.props.data) {
-      return null;
+  renderCarousel() {
+    if (
+      !this.props.origin ||
+      !this.state.sliderWidth ||
+      !this.state.itemWidth ||
+      !this.props.data
+    ) {
+      return null
     }
     return (
       <SnapCarousel
         lockScrollWhileSnapping
-        ref={(c) => this.carousel = c}
+        ref={(c) => (this.carousel = c)}
         data={this.props.data}
         firstItem={this.props.activeIndex}
         onSnapToItem={this.onSnapToItem}
         renderItem={this.renderItem}
         sliderWidth={this.state.sliderWidth}
-        itemWidth={this.state.itemWidth} />
-    );
+        itemWidth={this.state.itemWidth}
+      />
+    )
   }
 
-  render () {
+  render() {
     return (
       <ScrollView
         scrollEventThrottle={200}
@@ -224,11 +275,12 @@ class Cards extends React.Component {
         onLayout={this.onScrollViewLayout}
         bounces={true}
         directionalLockEnabled={true}
-        style={styles.scrollView}>
+        style={styles.scrollView}
+      >
         {this.renderCarousel()}
       </ScrollView>
-    );
+    )
   }
 }
 
-export default Cards;
+export default Cards

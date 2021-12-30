@@ -3,14 +3,13 @@
 The React Native Locator Kit is a downloadable project for you to add beautiful plug-and-play Store Locators to your React Native applications. Use the Kit to allow your users to find and browse store locations, view additional info for each store, and preview the distance and route to the store. Not building for a store owner or a business? You can use this project to locate anything from bike share hubs to ATMs to your neighborhood parks.
 
 #### Included in the Kit:
-+ Source files for the app
-+ Five UI themes
-+ A sample dataset in the form of a GeoJSON file
-+ Code for retrieving directions to store locations with the [Mapbox Directions API](https://www.mapbox.com/help/define-directions-api/)
 
+- Source files for the app
+- Five UI themes
+- A sample dataset in the form of a GeoJSON file
+- Code for retrieving directions to store locations with the [Mapbox Directions API](https://www.mapbox.com/help/define-directions-api/)
 
 ![store locator image 1](https://user-images.githubusercontent.com/5862541/33628842-d9d584f2-d9b6-11e7-9d6b-26e5392053ea.png)
-
 
 # What can I customize?
 
@@ -35,7 +34,6 @@ The Kit comes with five UI starter themes, but you can further customize these t
 ### Routing profile
 
 The Kit includes the use of the Mapbox Directions API to display estimated travel distances and display driving routes to store locations. It’s also possible to modify the routing profile to use our cycling or walking directions.
-
 
 # Installation
 
@@ -70,8 +68,8 @@ Getting Started
 
 There are a few steps needed to get up and running.
 
-
 1. We’ll want to create a JSON dataset to use with the StoreLocatorKit [here is a link to the one in our example application](https://github.com/mapbox/store-locator-react-native/blob/master/RNStoreLocatorExample/assets/places.json). There are some required feature properties needed. The `id`, `name`, `phoneFormatted`, `addressFormatted`, and `hoursFormatted` are all required fields that we use to render the cards on the bottom of the screen.
+
 ```
 {
   "id": "1",
@@ -93,8 +91,9 @@ There are a few steps needed to get up and running.
 ```
 
 2. Next we’ll want to create a theme to use in our application
+
 ```
-import MapboxGL from '@mapbox/react-native-mapbox-gl';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import StoreLocatorKit from '@mapbox/store-locator-react-native';
 
 import reallyCoolIcon from '...';
@@ -115,6 +114,7 @@ export const theme = new StoreLocatorKit.Theme({
 ```
 
 3. Now all we need to do is add the map to our application. We need to do our basic setup with MapboxGL by setting the access token, here is a snippet. You can head over to our [Maps SDK for React Native](https://github.com/mapbox/react-native-mapbox-gl) if you want any more information
+
 ```
 async componentWillMount () {
   if (!IS_IOS) {
@@ -126,6 +126,7 @@ async componentWillMount () {
 ```
 
 4. The last and final step is adding the store locator map to our application.
+
 ```
 import places from '...'; // this is the dataset from step one
 import { theme } from '...'; // theme from step 2

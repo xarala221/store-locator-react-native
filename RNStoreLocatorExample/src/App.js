@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import {
   View,
@@ -10,14 +10,14 @@ import {
   TouchableOpacity,
   StatusBar,
   StyleSheet,
-} from 'react-native';
+} from 'react-native'
 
-import MapboxGL from '@mapbox/react-native-mapbox-gl';
-import StoreLocatorKit from '@mapbox/store-locator-react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapboxGL from '@react-native-mapbox-gl/maps'
+import StoreLocatorKit from '@mapbox/store-locator-react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import places from '../assets/places.json';
+import places from '../assets/places.json'
 
 import {
   purpleTheme,
@@ -25,10 +25,10 @@ import {
   greenTheme,
   grayTheme,
   neutralTheme,
-} from './themes';
+} from './themes'
 
-const IS_IOS = Platform.OS === 'ios';
-const MAPBOX_ACCESS_TOKEN = 'Enter access token';
+const IS_IOS = Platform.OS === 'ios'
+const MAPBOX_ACCESS_TOKEN = 'Enter access token'
 
 const ThemeList = [
   {
@@ -56,7 +56,7 @@ const ThemeList = [
     theme: neutralTheme,
     image: require('../assets/neutral_button_image.png'),
   },
-];
+]
 
 const styles = StyleSheet.create({
   matchParent: {
@@ -86,38 +86,38 @@ const styles = StyleSheet.create({
     top: 32,
     left: 24,
   },
-});
+})
 
 class App extends React.Component {
-  constructor (props) {
-    super(props);
+  constructor(props) {
+    super(props)
 
     this.state = {
       isGranted: IS_IOS,
       activeTheme: null,
-      initialLocation: [-77.034084, 38.90],
-    };
-
-    this.onDismiss = this.onDismiss.bind(this);
-    this.renderThemeItem = this.renderThemeItem.bind(this);
-  }
-
-  async componentWillMount () {
-    if (!IS_IOS) {
-      const isGranted = await MapboxGL.requestAndroidLocationPermissions();
-      this.setState({ isGranted: isGranted });
+      initialLocation: [-77.034084, 38.9],
     }
-    MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
+
+    this.onDismiss = this.onDismiss.bind(this)
+    this.renderThemeItem = this.renderThemeItem.bind(this)
   }
 
-  onDismiss () {
-    StatusBar.setBarStyle('dark-content');
-    this.setState({ activeTheme: null });
+  async componentWillMount() {
+    if (!IS_IOS) {
+      const isGranted = await MapboxGL.requestAndroidLocationPermissions()
+      this.setState({ isGranted: isGranted })
+    }
+    MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN)
   }
 
-  renderThemeItem ({ item, index }) {
-    const marginTop = index === 0 ? 16 : 8;
-    const marginBottom = 8;
+  onDismiss() {
+    StatusBar.setBarStyle('dark-content')
+    this.setState({ activeTheme: null })
+  }
+
+  renderThemeItem({ item, index }) {
+    const marginTop = index === 0 ? 16 : 8
+    const marginBottom = 8
 
     const style = {
       flex: 1,
@@ -127,44 +127,52 @@ class App extends React.Component {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: item.theme.primaryColor,
-    };
+    }
 
     return (
-      <TouchableOpacity onPress={() => this.setState({ activeTheme: item.theme })}>
+      <TouchableOpacity
+        onPress={() => this.setState({ activeTheme: item.theme })}
+      >
         <View style={style}>
           <Image source={item.image} style={{ width: 130, flex: 1 }} />
         </View>
       </TouchableOpacity>
-    );
+    )
   }
 
-  renderThemeList () {
+  renderThemeList() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ alignItems: 'center', justifyContent: 'center', height: 60 }}>
-          <Text style={{ marginTop: 8, fontWeight: 'bold', fontSize: 16 }}>Tap a theme</Text>
+        <View
+          style={{ alignItems: 'center', justifyContent: 'center', height: 60 }}
+        >
+          <Text style={{ marginTop: 8, fontWeight: 'bold', fontSize: 16 }}>
+            Tap a theme
+          </Text>
         </View>
         <FlatList
           data={ThemeList}
           keyExtractor={(item) => item.name}
-          renderItem={this.renderThemeItem} />
+          renderItem={this.renderThemeItem}
+        />
       </View>
-    );
+    )
   }
 
-  renderMap () {
+  renderMap() {
     if (!this.state.activeTheme) {
-      return null;
+      return null
     }
 
-    StatusBar.setBarStyle('light-content');
+    StatusBar.setBarStyle('light-content')
 
     return (
       <Modal
         visible={!!this.state.activeTheme}
         animationType='slide'
         transparent
-        onRequestClose={this.onDismiss}>
+        onRequestClose={this.onDismiss}
+      >
         <View style={styles.matchParent}>
           <StoreLocatorKit.MapView
             simulateUserLocation
@@ -173,38 +181,41 @@ class App extends React.Component {
             centerCoordinate={this.state.initialLocation}
             featureCollection={places}
             zoomLevel={13}
-            style={styles.matchParent} />
+            style={styles.matchParent}
+          />
 
           <View style={styles.mapHeader}>
             <LinearGradient
               style={styles.mapGradient}
-              colors={['black', 'transparent']} />
+              colors={['black', 'transparent']}
+            />
 
             <Icon
               name='keyboard-backspace'
               size={28}
               onPress={this.onDismiss}
               style={styles.backArrow}
-              color='white' />
+              color='white'
+            />
 
             <Text style={styles.mapHeaderText}>Store Locator</Text>
           </View>
         </View>
       </Modal>
-    );
+    )
   }
 
-  render () {
+  render() {
     if (!this.state.isGranted) {
-      return null;
+      return null
     }
     return (
       <View style={styles.matchParent}>
         {this.renderThemeList()}
         {this.renderMap()}
       </View>
-    );
+    )
   }
 }
 
-export default App;
+export default App
